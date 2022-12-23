@@ -4,36 +4,55 @@ import { GoogleLogin } from '@react-oauth/google';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from './styles';
 import Input from './Input';
-import {createOrGetUser} from './index'
+import { useDispatch } from 'react-redux';
+import {useHistory} from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+import {signup,signin} from '../../actions/auth'
 
-
+const initialState={firstName: '', lastName: '', email:'', password:'', confirmPassword:''}
 const Auth = () => {
     const classes=useStyles();
     const [showPassword,setShowPassword]=useState(false);
     const [isSignup,setIsSignup]=useState(false);
-
-    const handleSubmit=()=>{
-
+    const [formData,setFormData]=useState(initialState)
+    const dispatch=useDispatch();
+    const history=useHistory();
+    const handleSubmit=(event)=>{
+        event.preventDefault()
+        if(isSignup){
+            dispatch(signup(formData,history))
+        }
+        else{
+            dispatch(signin(formData,history))
+        }
     }
 
-    const handleChange=()=>{
-
-    }
+    const handleChange=(e)=>{
+        setFormData({...formData, [e.target.name]:e.target.value})
+    };
 
     const handleShowPassword=()=> setShowPassword((prevShowPassword) => !prevShowPassword)
 
     const switchMode= ()=>{
         setIsSignup((prevIsSignup)=>!prevIsSignup)
-        handleShowPassword(false);
+        setShowPassword(false);
     }
 
 
     const googleSuccess=async (res)=>{
-        console.log(res);
-
+        const result= jwtDecode(res?.credential)
+        const token = res?.credential;
+        try{
+            dispatch({type: 'AUTH',data:{result,token}});
+            history.push('/')
+        }
+        catch(error){
+            console.log(error)
+        }
     };
 
-    const googleFailure=()=>{
+    const googleFailure=(error)=>{
+        console.log(error)
         console.log("Google Sign In was Unsuccessful");
     };
 
@@ -67,6 +86,10 @@ const Auth = () => {
                 </Button>
 
                     <GoogleLogin
+                        //Set up your own clientID, it probably won't work with mine
+                        //cause it only recognizes local addresses,it's easy to generate
+                        //go to https://console.cloud.google.com/apis/credentials?
+                        clientID="362895972754-p9tn4t6negjs3qm0u3djp00n7ti02v95.apps.googleusercontent.com"
                         render={(renderProps)=>(
                             <Button
                                className={classes.googleButton}
@@ -80,7 +103,7 @@ const Auth = () => {
                         )}
 
                             onSuccess={(response)=>{
-                                createOrGetUser(response)
+                                googleSuccess(response)
                             }}
 
                             onError={googleFailure}

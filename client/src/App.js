@@ -10,7 +10,10 @@ import Auth from './components/Auth/Auth';
 const App = () => {
 
   return (
-    <GoogleOAuthProvider clientId='231484548436-495o66ds844og1l34dj8g36juac08ppm.apps.googleusercontent.com'>
+    //Set up your own clientID, it probably won't work with mine
+    //cause it only recognizes local addresses,it's easy to generate
+    //go to https://console.cloud.google.com/apis/credentials?
+    <GoogleOAuthProvider clientId="362895972754-p9tn4t6negjs3qm0u3djp00n7ti02v95.apps.googleusercontent.com">
    <BrowserRouter>   
       <Container maxWidth="lg">
       <Navbar/>
