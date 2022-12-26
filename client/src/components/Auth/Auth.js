@@ -89,7 +89,7 @@ const Auth = () => {
                         //Set up your own clientID, it probably won't work with mine
                         //cause it only recognizes local addresses,it's easy to generate
                         //go to https://console.cloud.google.com/apis/credentials?
-                        clientID="362895972754-p9tn4t6negjs3qm0u3djp00n7ti02v95.apps.googleusercontent.com"
+                        clientID="861122051521-3959qu8dhnnpue2lkf13egtibijk6572.apps.googleusercontent.com"
                         render={(renderProps)=>(
                             <Button
                                className={classes.googleButton}
@@ -112,7 +112,7 @@ const Auth = () => {
                     />
 
 
-                <Grid container justify="flex-end">
+                <Grid container justifyContent="flex-end">
                     <Grid item>
                         <Button onClick={switchMode}>
                             {isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up "}
